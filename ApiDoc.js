@@ -76,7 +76,7 @@ let ExportApiToMarkdown = function () {
                 let kv = endpoint.getUrlParameters(true);
 
                 for (let k in kv) {
-                    section.push('|' + k + '|' + typeof kv[k] + '|' + kv[k] + '| - |\n');
+                    section.push('| ' + k + ' | ' + typeof kv[k] + ' | ' + kv[k] + ' | - |\n');
                 }
 
                 section.push('\n\n');
@@ -97,20 +97,20 @@ let ExportApiToMarkdown = function () {
             if (endpoint.getUrlEncodedBody(false)) {
                 let arr = endpoint.getUrlEncodedBodyKeys();
                 for (let k in arr) {
-                    section.push('|' + arr[k] + '| string |' + endpoint.getUrlEncodedBodyKey([arr[k]]) + '| - |\n');
+                    section.push('| ' + arr[k] + ' | string | ' + endpoint.getUrlEncodedBodyKey([arr[k]]) + ' | - |\n');
                 }
             }
 
             if (endpoint.getMultipartBody(false)) {
                 let kv = endpoint.getMultipartBody(false);
                 for (let k in kv) {
-                    section.push('|' + k + '|' + typeof kv[k] + '|' + kv[k] + '| - |\n');
+                    section.push('| ' + k + ' | ' + typeof kv[k] + ' | ' + kv[k] + ' | - |\n');
                 }
             }
 
             if (endpoint.jsonBody) {
                 for (let k in endpoint.jsonBody) {
-                    section.push('|' + k + '|' + typeof endpoint.jsonBody[k] + '|' + endpoint.jsonBody[k] + '| - |\n');
+                    section.push('| ' + k + ' | ' + typeof endpoint.jsonBody[k] + ' | ' + endpoint.jsonBody[k] + ' | - |\n');
                 }
             }
 
@@ -145,32 +145,40 @@ let ExportApiToMarkdown = function () {
 
             section.push('\n\n');
 
-            section.push('#### Response Body Parameters');
+            let respBody = endpoint.getLastExchange().responseBody;
+            
+            if (respBody) {
+                let obj = JSON.parse(respBody);
 
-            section.push('\n\n');
-
-            section.push('| Name | Type | Example | Description |\n');
-
-            section.push('|:------:|:------:|:-----|:-----|\n');
-            section.push('| - | - | - | - |\n');
-
-            section.push('\n\n');
-
-            section.push('#### Response Body Example');
-
-            section.push('\n\n');
-
-            section.push('```json');
-
-            section.push('\n');
-
-            section.push(endpoint.getLastExchange().responseBody);
-
-            section.push('\n');
-
-            section.push('```');
-
-            section.push('\n\n');
+                section.push('#### Response Body Parameters');
+    
+                section.push('\n\n');
+    
+                section.push('| Name | Type | Example | Description |\n');
+    
+                section.push('|:------:|:------:|:-----|:-----|\n');
+                for (let key in obj) {
+                    section.push('| ' + key + ' | ' + typeof obj[key] + ' | ' + obj[key] + ' | - |\n');
+                }
+    
+                section.push('\n\n');
+    
+                section.push('#### Response Body Example');
+    
+                section.push('\n\n');
+    
+                section.push('```json');
+    
+                section.push('\n');
+    
+                section.push(respBody);
+    
+                section.push('\n');
+    
+                section.push('```');
+    
+                section.push('\n\n');
+            }
 
             //
             //	Convert the array with all the data in to a single string
