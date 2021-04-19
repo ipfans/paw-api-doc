@@ -152,6 +152,7 @@ let ExportApiToMarkdown = function () {
             section.push('| Name | Type | Example | Description |\n');
 
             section.push('|:------:|:------:|:-----|:-----|\n');
+            section.push('| - | - | - | - |\n');
 
             section.push('\n\n');
 
@@ -159,7 +160,11 @@ let ExportApiToMarkdown = function () {
 
             section.push('\n\n');
 
-            section.push('```');
+            section.push('```json');
+
+            section.push('\n');
+
+            section.push(endpoint.getLastExchange().responseBody);
 
             section.push('\n');
 
